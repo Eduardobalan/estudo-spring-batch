@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+  postgreSQLOrigem:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: DB_ORIGEM
+    volumes:
+      - /srv/docker/postgresql:/var/lib/postgresql
+    ports:
+      - 5432:5432
+    networks:
+      - albusNet
+
+  postgreSQLDestino:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: DB_DESTINO
+    volumes:
+      - /srv/docker/postgresql:/var/lib/postgresql
+    ports:
+      - 5433:5432
+    networks:
+      - albusNet
+networks:
+  albusNet:
