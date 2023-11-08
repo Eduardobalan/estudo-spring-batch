@@ -43,7 +43,9 @@ O projeto oferece um único ponto de entrada para a execução de Jobs:
 ______________________________________________________________________________________________________________________
 
 #### Executando o Job JOB_MIGRAR_PESSOA_DESTINO
-Realiza a migração de dados. Os dados são lidos de uma tabela de origem (tb_pessoa) e são inseridos nas tabelas de destino (tb_pessoa_destino e tb_usuario_destino).
+Neste job inicial, a migração de dados é executada, onde os dados são extraídos de uma tabela de origem (tb_pessoa) e inseridos nas tabelas de destino (tb_pessoa_destino e tb_usuario_destino). 
+Embora este job possa parecer direto, há diversas configurações essenciais dentro da pasta de configuração do aplicativo (application/configuration). 
+Estas configurações são cruciais para informar o Spring sobre quais entidades (Entitys) e repositórios (repositorys) estão vinculados a quais bases de dados, e apesar de serem ocultas, desempenham um papel fundamental no processo de migração de dados.
 
 Use o seguinte comando curl para iniciar o Job 'JOB_MIGRAR_PESSOA_DESTINO':
 ```bash
@@ -52,11 +54,30 @@ curl --request POST   --url http://localhost:8081/startJobs/JOB_MIGRAR_PESSOA_DE
 ______________________________________________________________________________________________________________________
 
 #### Executando o Job JOB_VISUALIZAR_CICLO_DE_VIDA_SPRING_BATCH
-Ajudar no entendimento do ciclo de vida completo de um JOB do Spring Batch, incluindo as etapas do JOB e as interações com seus listeners.
+Este job realiza o mesmo procedimento do JOB_MIGRAR_PESSOA_DESTINO, porém, nele foram incorporados vários listeners do Spring. 
+Esses listeners auxiliam na compreensão do ciclo de vida completo de um job no Spring Batch, abrangendo as etapas do job e as interações com seus ouvintes (listeners).
 
 Para iniciar o Job 'JOB_VISUALIZAR_CICLO_DE_VIDA_SPRING_BATCH', utilize o seguinte comando curl:
 ```bash
 curl --request POST   --url http://localhost:8081/startJobs/JOB_VISUALIZAR_CICLO_DE_VIDA_SPRING_BATCH/2 --header 'Content-Type: application/json' --data '{}'
+```
+
+______________________________________________________________________________________________________________________
+
+
+#### Executando o Job JOB_UTILIZANDO_CONTEXT
+Neste exemplo, investigamos a utilização do contexto no Spring Batch para esclarecer o funcionamento dos contextos de step e job. 
+Em um job composto por 3 steps, inserimos informações tanto no **StepExecutionContext** quanto no **JobExecutionContext**. No terceiro step, 
+ao tentar recuperar essas informações, notamos que o valor salvo no **StepExecutionContext** não está disponível, uma vez que esse contexto existe apenas para a execução de um step específico. 
+No entanto, observamos que o **JobExecutionContext** mantém suas variáveis intactas.
+
+Essa distinção é valiosa em cenários onde desejamos compartilhar informações entre etapas de um job e persistir dados para possíveis reinicializações.
+O JobExecutionContext pode ser útil para armazenar dados de alto nível, compartilhados entre várias etapas do job, enquanto o StepExecutionContext é ideal para informações específicas de uma etapa individual. 
+Isso permite uma maior flexibilidade e controle ao gerenciar o fluxo de trabalho do Spring Batch, garantindo que os dados estejam disponíveis onde e quando são necessários.
+
+Para iniciar o Job 'JOB_UTILIZANDO_CONTEXT', utilize o seguinte comando curl:
+```bash
+curl --request POST   --url http://localhost:8081/startJobs/JOB_UTILIZANDO_CONTEXT/2 --header 'Content-Type: application/json' --data '{}'
 ```
 
 ______________________________________________________________________________________________________________________
