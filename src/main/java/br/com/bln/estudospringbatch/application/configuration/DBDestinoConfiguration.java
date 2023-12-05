@@ -44,12 +44,19 @@ public class DBDestinoConfiguration {
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
         properties.put("hibernate.hbm2ddl.auto", "update");
 
-        return builder
+
+        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = builder
                 .dataSource(datasource)
                 .packages("br.com.bln.estudospringbatch.domain.entity.destino")
                 .persistenceUnit("persistenceUnitDestino")
                 .properties(properties)
                 .build();
+
+//        localContainerEntityManagerFactoryBean.setJpaPropertyMap(Collections.singletonMap("javax.persistence.flushMode", "COMMIT"));
+//        localContainerEntityManagerFactoryBean.setJpaPropertyMap(Collections.singletonMap("org.hibernate.flushMode", "COMMIT"));
+//        localContainerEntityManagerFactoryBean.setJpaPropertyMap(Collections.singletonMap("hibernate.jdbc.batch_size", "300"));
+//        localContainerEntityManagerFactoryBean.setJpaPropertyMap(Collections.singletonMap("org.hibernate.jdbc.batch_size", "300"));
+        return localContainerEntityManagerFactoryBean;
     }
 
     @Primary

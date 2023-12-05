@@ -10,7 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
@@ -19,7 +18,7 @@ public class SpringBatchConfig {
 
     @Bean(name = "batch-datasource")
     @ConfigurationProperties(prefix = "batch.datasource")
-    public DataSource criarDatasourceOrigem() {
+    public DataSource criarDatasourceBatch() {
         return DataSourceBuilder.create().build();
     }
 
@@ -29,10 +28,11 @@ public class SpringBatchConfig {
     }
 
     @Bean(name = "batch-repositorio")
-    public JobRepository getJobRepository(@Qualifier("batch-datasource") DataSource datasource) {
+    public JobRepository getJobRepository(@Qualifier("batch-datasource") DataSource datasource,
+                                          BatchConfigurer batchConfigurer) throws Exception {
         JobRepositoryFactoryBean factoryBean = new JobRepositoryFactoryBean();
         factoryBean.setDataSource(datasource);
-        factoryBean.setTransactionManager(new DataSourceTransactionManager(datasource));
+        factoryBean.setTransactionManager(batchConfigurer.getTransactionManager());
         factoryBean.setTablePrefix("BATCH_");
         factoryBean.setIsolationLevelForCreate("PROPAGATION_REQUIRED");
         try {

@@ -1,6 +1,5 @@
 package br.com.bln.estudospringbatch.domain.entity.destino;
 
-import br.com.bln.estudospringbatch.domain.entity.GenericEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +25,7 @@ import javax.persistence.Table;
 @AttributeOverride(name = "dataAlteracao", column = @Column(name = "PS_DTHR_ALTERACAO"))
 @AttributeOverride(name = "usuarioCadastro", column = @Column(name = "PS_USUARIO_CADASTRO"))
 @AttributeOverride(name = "usuarioAlteracao", column = @Column(name = "PS_USUARIO_ALTERACAO"))
-public class PessoaDestinoEntity extends GenericEntity {
+public class PessoaDestinoEntity {
 
     @Id
     @Column(name = "PS_ID", nullable = false)
@@ -38,4 +37,7 @@ public class PessoaDestinoEntity extends GenericEntity {
 
     @Column(name = "PS_APELIDO")
     private String apelido;
+
+    @Column(name = "PS_ID_ORIGEM")
+    private Long idOrigem;
 }
