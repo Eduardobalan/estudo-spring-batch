@@ -132,6 +132,30 @@ curl --request POST   --url http://localhost:8081/startJobs/JOB_MIGRAR_PESSOA_E_
 
 ______________________________________________________________________________________________________________________
 
+#### Executando o Job JOB_MIGRAR_PESSOA_COMPOSITE
+
+Neste exemplo, estamos utilizando o **CompositeItemProcessor** e **CompositeItemWriter** para compreender o seu
+comportamento. Esses compositores são empregados para agregar múltiplos **ItemProcessor** ou **ItemWriter**,
+respectivamente. Normalmente, os composites são inseridos em um Step como Processor ou Writer.
+
+O **CompositeItemProcessor** opera de acordo com o pattern 'change of responsibility', no qual cada item passa por todos
+os ItemProcessor até chegar ao final da cadeia.
+É crucial observar que essa abordagem pode potencialmente gerar erros em tempo de execução, pois o tipo de saída
+genérico de um ItemProcessor deve corresponder ao tipo de entrada do próximo ItemProcessor. Além disso, o último
+ItemProcessor deve produzir a saída esperada pelo ItemWriter. Portanto, a ordem de inserção no CompositeItemProcessor é 
+fundamental para garantir o fluxo correto.
+
+O **CompositeItemWriter** possui uma dinâmica mais simples. Cada ItemWriter é chamado para receber a lista
+dos itens processados na mesma sequência em que foram inseridos no CompositeItemWriter.
+
+Para iniciar o Job 'JOB_MIGRAR_PESSOA_COMPOSITE', utilize o seguinte comando curl:
+
+```bash
+curl --request POST   --url http://localhost:8081/startJobs/JOB_MIGRAR_PESSOA_COMPOSITE/100 --header 'Content-Type: application/json' --data '{}'
+```
+
+______________________________________________________________________________________________________________________
+
 
 Agora, você pode facilmente agendar a execução dos Jobs desejados por meio de requisições HTTP.
 Lembre-se de que a requisição HTTP apenas agendará a execução e não retornará uma resposta direta após o agendamento
